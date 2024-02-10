@@ -63,7 +63,7 @@ namespace CompanyEmployees.Presentation.Controllers
         public IActionResult PartiallyUpdateEmployeeForCompany(Guid companyId, Guid id, [FromBody] JsonPatchDocument<EmployeeForUpdateDto> patchDoc) 
         { 
             if (patchDoc is null) 
-                return BadRequest("patchDoc object sent from client is null."); 
+                return BadRequest("The patchDoc object sent from client is null."); 
             
             var result = _service.EmployeeService.GetEmployeeForPatch(companyId, id, compTrackChanges: false, empTrackChanges: true); 
             
