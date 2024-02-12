@@ -15,7 +15,7 @@ namespace Service
 
         public CompanyService(IRepositoryManager repository, ILoggerManager logger, IMapper mapper)
         {
-            _repository = repository; 
+            _repository = repository;
             _logger = logger;
             _mapper = mapper;
         }
@@ -29,25 +29,25 @@ namespace Service
             return companiesDto;
         }
 
-        public async Task<IEnumerable<CompanyDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges) 
-        { 
-            if (ids is null) 
-                throw new IdParametersBadRequestException(); 
-            
-            var companyEntities = await _repository.Company.GetByIdsAsync(ids, trackChanges); 
-            if (ids.Count() != companyEntities.Count()) 
-                throw new CollectionByIdsBadRequestException(); 
-            
-            var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities); 
-            return companiesToReturn; 
+        public async Task<IEnumerable<CompanyDto>> GetByIdsAsync(IEnumerable<Guid> ids, bool trackChanges)
+        {
+            if (ids is null)
+                throw new IdParametersBadRequestException();
+
+            var companyEntities = await _repository.Company.GetByIdsAsync(ids, trackChanges);
+            if (ids.Count() != companyEntities.Count())
+                throw new CollectionByIdsBadRequestException();
+
+            var companiesToReturn = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
+            return companiesToReturn;
         }
 
         public async Task<CompanyDto> GetCompanyAsync(Guid id, bool trackChanges)
         {
             var company = await GetCompanyAndCheckIfItExists(id, trackChanges);
 
-            var companyDto = _mapper.Map<CompanyDto>(company); 
-            return companyDto; 
+            var companyDto = _mapper.Map<CompanyDto>(company);
+            return companyDto;
         }
 
         public async Task<CompanyDto> CreateCompanyAsync(CompanyForCreationDto company)
@@ -76,8 +76,8 @@ namespace Service
             await _repository.SaveAsync();
 
             var createdCompanyCollection = _mapper.Map<IEnumerable<CompanyDto>>(companyEntities);
-            var createdIds = string.Join(",", createdCompanyCollection.Select(c => c.Id));  
-            
+            var createdIds = string.Join(",", createdCompanyCollection.Select(c => c.Id));
+
             return (companies: createdCompanyCollection, ids: createdIds);
         }
 
@@ -89,11 +89,11 @@ namespace Service
             await _repository.SaveAsync();
         }
 
-        public async Task UpdateCompanyAsync(Guid companyId, CompanyForUpdateDto companyForUpdate, bool trackChanges) 
-        { 
+        public async Task UpdateCompanyAsync(Guid companyId, CompanyForUpdateDto companyForUpdate, bool trackChanges)
+        {
             var company = await GetCompanyAndCheckIfItExists(companyId, trackChanges);
 
-            _mapper.Map(companyForUpdate, company); 
+            _mapper.Map(companyForUpdate, company);
             await _repository.SaveAsync();
         }
 
